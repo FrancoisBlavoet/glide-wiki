@@ -1,9 +1,8 @@
 ### Command line
 
-1. Acquire Glide 
- In your project directory, either:
-  a. run git clone git@github.com:bumptech/glide.git
-  b. or, add Glide as a submodule: git submodule add git@github.com:bumptech/glide.git glide
+1. In your project directory, either:
+  1. run git clone git@github.com:bumptech/glide.git
+  2. or, add Glide as a submodule: git submodule add git@github.com:bumptech/glide.git glide
 2. cd glide/library
 3. android update project --name glide --target "android-16" --path .
 4. cd ../.. #your main project dir
