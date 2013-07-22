@@ -4,6 +4,7 @@ Glide is image loading library for Android that provides a simple and high level
 
 Although Glide is primarily focused on loading images into memory, it includes an integrated interface for fetching remote or local images and includes reference implementations for loading local files as well as URLs over http. The URL implementation is based on Google's [Volley](https://android.googlesource.com/platform/frameworks/volley/). The interface is designed to make it easy to integrate any other third party library as well.
 
+To get started, see [[adding Glide to your project]].
 ***
 
 Glide provides several important features:
