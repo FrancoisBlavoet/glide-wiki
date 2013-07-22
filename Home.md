@@ -6,7 +6,7 @@ Although Glide is primarily focused on loading images into memory, it includes a
 
 To get started, see [[adding Glide to your project]].
 
-You may also want to take a look at the [[tutorials]] or at the [Javadocs](http://bumptech.github.io/glide/docs/index.html)
+You may also want to take a look at the [[tutorials]] or at the [documentation](http://bumptech.github.io/glide/docs/index.html)
 
 ### Features
 
