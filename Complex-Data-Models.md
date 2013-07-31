@@ -2,7 +2,9 @@
 
 Using Glide with a data model more complex than a simple File or URL requires implementing the [ModelLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/model/ModelLoader.java) interface.
 
-The purpose of the ModelLoader interface is to translate an arbitrarily complex data model into a concrete data type that we can then pass to a [StreamLoader](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/stream) to actually fetch
+The purpose of the ModelLoader interface is to translate an arbitrarily complex data model into a concrete data type that we can then pass to a [StreamLoader](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/stream) to actually fetch.
+
+You can specify the model loader to use to load any model with the `Glide.using` method.
 
 #### Http using [Volley](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0CCoQtwIwAA&url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dyhv8l9F44qo&ei=IWjtUerhNoW_qgGYhoHwBA&usg=AFQjCNEKoQ4Fs-VJ-0VJuP4LFA1s5tUpgw)
 
