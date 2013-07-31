@@ -2,7 +2,7 @@
 
 Glide is image loading library for Android that provides a simple and high level interface for efficiently displaying large lists of remote images. 
 
-Although Glide is primarily focused on loading images into memory, it includes an integrated interface for fetching remote or local images and includes reference implementations for loading local files as well as URLs over http. The URL implementation is based on Google's [Volley](https://android.googlesource.com/platform/frameworks/volley/). The interface is designed to make it easy to integrate any other third party library as well.
+Although Glide is primarily focused on loading images into memory, it includes an integrated interface for fetching remote or local images and includes reference implementations for loading local files, resources, and uris as well as remote urls. The url implementation is based on Google's [Volley](https://android.googlesource.com/platform/frameworks/volley/). The interface is designed to make it easy to integrate any other third party library as well.
 
 To get started, see [[adding Glide to your project]].
 
@@ -16,28 +16,27 @@ Glide provides several important features:
 
   For common models (Files and URLs), using Glide requires only a single line of code:
 
-        Glide.load(yourUrlOrFile).into(yourImageView).begin();
+        Glide.load(yourUrlOrFile).into(yourImageView);
 
   You can also specify how to resize your image and add an animation in the same line:
 
-        Glide.load(yourModel).into(yourImageView).centerCrop().animate(R.anim.your_anim_id).begin();
+        Glide.load(yourModel).centerCrop().animate(R.anim.your_anim_id).into(yourImageView);
 
   For more complex data models, or for when you want to customize your file or url based on the size of your view, you implement the ModelLoader interface and then pass that in along with everything else in your call to load:
 
         Glide.load(yourModel)
-            .into(yourImageView)
             .with(yourModelLoader)
             .centerCrop()
             .animate(R.anim.your_anim_id)
-            .begin();
+            .into(yourImageView)
   
   It's also easy to integrate third party libraries if you don't fetch images with http or don't want to use Volley. For more information on using Glide with complex data models or integrating other libraries, see the [[Tutorials]].
 
-2. Determining the size of views at runtime
+2. The exact size the image needs to fill
 
   Knowing exactly what size image is needed for a given view allows you to download the smallest possible image to fill the view saving time, battery life, and data. It also allows Glide to downsample and crop images as they are loaded in to memory saving space both during the load and in the caches.
 
-3. Managing view recycling 
+3. View recycling
 
   All you need to do is make a simple one line call to Glide for each call to `getView()` in you ListAdapter. Glide handles the rest including canceling old jobs and ensuring only the latest request populates the view.
 
@@ -49,7 +48,11 @@ Glide provides several important features:
 
 5. Bitmap reuse  
 
-  On devices with the Honeycomb or later, Glide will recycle bitmaps when loading images from the disk cache to minimize garbage collections. This is done completely transparently as images are loaded and then replaced in recycled views in Android's ListViews. Once images have been resized once and the disk cache is populated, Bitmap reuse makes scrolling smooth, even when images aren't all in the memory cache.
+  On devices with the Honeycomb or later, Glide will reuse bitmaps when loading images from the disk cache to minimize garbage collections. This is done completely transparently as images are loaded and then replaced in recycled views in Android's ListViews. Once images have been resized once and the disk cache is populated, Bitmap reuse makes scrolling smooth, even when images aren't all in the memory cache.
 
+### Glide vs Picasso
 
+Although Glide's interface is heavily influenced by [Picasso](http://square.github.io/picasso/), it isn't yet a drop in replacement. Glide does not currently allow you to load images for objects other than views and it does not allow you to easily specify an arbitrary transformation for an image, both of which Picasso does. As a result, Glide is somewhat less general than Picasso.
+
+If you need to specify arbitrary transformations or load images for arbitrary objects, Picasso is probably the better choice for now. I'm planning on implementing both of these features in the near future, but they aren't in place yet. If you are ok with the limited selection of transformations and just want the most efficient image loading and the smoothest possible scrolling, Glide is probably better than anything else out there.
   
