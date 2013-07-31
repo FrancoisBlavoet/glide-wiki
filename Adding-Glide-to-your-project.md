@@ -13,8 +13,7 @@
 4. Select glide/library and click "OK"
 5. Make sure "Create module from existing sources" is selected and click "OK"
 6. Click "Next"
-7. Deselect all libraries (we will add these later) and Click "Next" twice more then "Finish"
-8. In the new module, click on the "+" button below the dependencies list, select "Jars or directories" and choose all of the jars in glide/library/libs.
-9. In Module Settings, click on your main project module, and then click on the "+" button below the dependencies list, select "Module Dependency", and choose the new module (probably called "library").
+7. Make sure libraries is checked and Click "Next", then "Next" twice more, and then "Finish"
+8. In Module Settings, click on your main project module, and then click on the "+" button below the dependencies list, select "Module Dependency", and choose the new module (probably called "library").
 
   
