@@ -52,7 +52,7 @@ Glide provides several important features:
 
 ### Glide vs Picasso
 
-Although Glide's interface is heavily influenced by [Picasso](http://square.github.io/picasso/), it isn't yet a drop in replacement. Glide does not currently allow you to load images for objects other than views and it does not allow you to easily specify an arbitrary transformation for an image, both of which Picasso does. As a result, Glide is somewhat less general than Picasso.
+Although Glide's interface is heavily influenced by [Picasso](http://square.github.io/picasso/), it isn't yet a drop in replacement. Glide does not currently allow you to load images for objects other than views and it does not allow you to easily specify an arbitrary transformation for an image, both of which Picasso allows. As a result, Glide is somewhat less general than Picasso.
 
 If you need to specify arbitrary transformations or load images for arbitrary objects, Picasso is probably the better choice for now. I'm planning on implementing both of these features in the near future, but they aren't in place yet. If you are ok with the limited selection of transformations and just want the most efficient image loading and the smoothest possible scrolling, Glide is probably better than anything else out there.
   
