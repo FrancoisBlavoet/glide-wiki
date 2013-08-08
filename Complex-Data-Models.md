@@ -20,8 +20,7 @@ For a simple example of a VolleyModelLoader, see [FlickrModelLoader](https://git
 
 #### Generic remote or local assets
 
-If you don't use http, are loading images from local files, or don't want to use Volley, you can either use or subclass one of the other included [ModelLoaders](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/model), or you can implement  
-[ModelLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/model/ModelLoader.java) yourself. 
+If you don't use http, are loading images from local files, or don't want to use Volley, you can either use or subclass one of the other included [ModelLoaders](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/model), or you can implement [ModelLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/model/ModelLoader.java) yourself. 
 
 ModelLoader also requires you to implement two methods, `getId(Model model)` and `getStreamLoader(Model model, int width, int height)`.
 
