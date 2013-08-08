@@ -20,24 +20,24 @@ For a simple example of a VolleyModelLoader, see [FlickrModelLoader](https://git
 
 #### Generic remote or local assets
 
-If you don't use http, are loading images from local files, or don't want to use Volley, you can either use or subclass one of the other included [ModelLoaders](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/model), or you can extend 
-[BaseModelLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/model/BaseModelLoader.java). 
+If you don't use http, are loading images from local files, or don't want to use Volley, you can either use or subclass one of the other included [ModelLoaders](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/model), or you can implement  
+[ModelLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/model/ModelLoader.java) yourself. 
 
-BaseModelLoader is a simple abstract implementation of the ModelLoader interface that includes some generic housekeeping. BaseModelLoader also requires you to implement two methods, `getId(Model model)` and `buildStreamLoader(Model mode, int width, int height)`.
+ModelLoader also requires you to implement two methods, `getId(Model model)` and `getStreamLoader(Model model, int width, int height)`.
 
 `getId()` requires you to return a unique String identifying this particular model, the same as with VolleyModelLoader.
 
-`buildStreamLoader()` is slightly more complex and requires you to return a [StreamLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/stream/StreamLoader.java). Ideally you can simply translate your model into one of the types for which Glide already includes a [StreamLoader implementation](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/stream).
+`getStreamLoader()` is slightly more complex and requires you to return a [StreamLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/stream/StreamLoader.java). Ideally you can simply translate your model into one of the types for which Glide already includes a [StreamLoader implementation](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/stream).
 
-A simple implementation of BaseModelLoader for files is something like this:
+A simple implementation of ModelLoader for files is something like this:
 
-    public class FileLoader extends BaseModelLoader<YourModel> {
+    public class FileLoader implements ModelLoader<YourModel> {
         @Override
         public String getId(YourModel model) {
             return model.getId(); 
         }
  
-        public StreamLoader buildStreamLoader(YourModel model, int width, int height) {
+        public StreamLoader getStreamLoader(YourModel model, int width, int height) {
             File file = getFileFor(model);
             return new FileStreamLoader(file);
         }
@@ -47,13 +47,13 @@ Where FileStreamLoader is an included StreamLoader for Files.
 
 #### Generic assets with external libraries
 
-Although Glide includes an implementation of ModelLoader and StreamLoader based on Volley, you can also easily produce a similar implementation for any third party library or method of fetching assets. To do so, you will need to implement BaseModelLoader as above, but you will also need to define a new [StreamLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/stream/StreamLoader.java). 
+Although Glide includes an implementation of ModelLoader and StreamLoader based on Volley, you can also easily produce a similar implementation for any third party library or method of fetching assets. To do so, you will need to implement ModelLoader as above, but you will also need to define a new [StreamLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/stream/StreamLoader.java). 
 
 StreamLoaders are the objects that actually fetch an image, or call in to a third party library, from a specific type (URL, file etc). 
 
 For example, Bump uses some shared code written in C to download images from a UUID that identifies an image and call a callback with a path to the image when the download completes. Therefore, we've implemented a BaseModelLoader and StreamLoader that look something like this:
 
-    public class BumpImageLoader extends BaseModelLoader<BumpImage> {
+    public class BumpImageLoader implements ModelLoader<BumpImage> {
         private final BumpImageDownloader imageDownloader;
     
         public BumpImageLoader(BumpImageDownloader imageDownloader) {
@@ -66,7 +66,7 @@ For example, Bump uses some shared code written in C to download images from a U
         }
 
         @Override
-        public StreamLoader buildStreamLoader(BumpImage image, int width, int height) {
+        public StreamLoader geStreamLoader(BumpImage image, int width, int height) {
             final UUID uuid = image.getUuid();
             return new StreamLoader() {
                 @Override
