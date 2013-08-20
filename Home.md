@@ -2,7 +2,7 @@
 
 Glide is image loading library for Android that provides a simple and high level interface for efficiently displaying large lists of remote images. 
 
-Although Glide is primarily focused on loading images into memory, it includes an integrated interface for fetching remote or local images and includes reference implementations for loading local files, resources, and uris as well as remote urls. The url implementation is based on Google's [Volley](https://android.googlesource.com/platform/frameworks/volley/). The interface is designed to make it easy to integrate any other third party library as well.
+Although Glide is primarily focused on loading images into memory, it includes an integrated interface for fetching remote or local images and includes reference implementations for loading local files, resources, and uris as well as remote urls. The url implementation is based on Google's [Volley](https://android.googlesource.com/platform/frameworks/volley/). However, the interface is designed to make it easy to integrate any other third party library as well.
 
 To get started, see [[adding Glide to your project]].
 
@@ -26,8 +26,8 @@ You may also want to take a look at the [[tutorials]] or at the [documentation.]
 
   For more complex data models, or for when you want to customize your file or url based on the size of your view, you implement the ModelLoader interface and then pass that in along with everything else in your call to load:
 
-        Glide.load(yourModel)
-            .with(yourModelLoader)
+        Glide.using(yourModelLoader)
+            .load(yourModel)
             .centerCrop()
             .animate(R.anim.your_anim_id)
             .into(yourImageView)
@@ -42,7 +42,7 @@ You may also want to take a look at the [[tutorials]] or at the [documentation.]
 
   All you need to do is make a simple one line call to Glide for each call to `getView()` in you ListAdapter. Glide handles the rest including canceling old jobs and ensuring only the latest request populates the view.
 
-4. Memory and disk image caching as well as http response caching (handled by Volley)
+4. Glide handles memory, disk, and http response caching
 
   Glide provides lru memory and disk caches to minimize the number of remote fetches and resize operations that have to be performed. The disk cache allows us not only to only resize and crop each image once, but it also makes subsequent loads very fast (on the order of 50ms depending on the image size), so even on older devices images are loaded quickly the second time around.
 
@@ -50,4 +50,8 @@ You may also want to take a look at the [[tutorials]] or at the [documentation.]
 
 5. Glide recycles bitmaps to minimize jank inducing garbage collections 
 
-  On devices with the Honeycomb or later, Glide will reuse bitmaps when loading images from the disk cache and while cropping images to minimize garbage collections. This is done completely transparently as images are loaded and then replaced in recycled views in Android's ListViews. Once images have been resized once and the disk cache is populated, Bitmap reuse makes scrolling smooth by drastically reducing garbage collections. 
+  On devices with the Honeycomb or later, Glide will reuse bitmaps when loading images from the disk cache and while cropping images to minimize garbage collections. This is done completely transparently as images are loaded and then replaced in recycled views in Android's ListViews. Once images have been resized once and the disk cache is populated, Bitmap recycling makes scrolling smooth by drastically reducing garbage collections.
+
+6. Glide reads and obeys exif orientation data
+
+  Glide automatically orients jpeg and tiff images according to the exif data in the images' headers. The included exif parser reads directly from InputStreams so exif data can be read from any source without any additional IO. In contrast, Android's ExifInterface handles fields other than orientation, but is limited to files and requires two IO operations to both load the image and read the exif data.
