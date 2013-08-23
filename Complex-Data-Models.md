@@ -89,6 +89,6 @@ For example, Bump uses some shared code written in C to download images from a U
          }
     }
 
-    For other examples take a look at the [StreamLoader implementations](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/stream) and [ModelLoader implementations](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/model)
+For other examples take a look at the [StreamLoader implementations](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/stream) and [ModelLoader implementations](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/model)
 
 
