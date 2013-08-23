@@ -16,7 +16,7 @@ VolleyModelLoader requires you to implement two simple methods, `getId(Model mod
 
 `getUrl()` is where you construct your URL from the given model and dimensions. This URL may then later be passed to Volley to fetch the image if it is not cached.
 
-For a simple example of a VolleyModelLoader, see [FlickrModelLoader](https://github.com/bumptech/glide/blob/master/samples/flickr/src/com/bumptech/flickr/FlickrModelLoader.java) in the Flickr sample project.
+For a simple example of a VolleyModelLoader, see [FlickrModelLoader](https://github.com/bumptech/glide/blob/master/samples/flickr/src/com/bumptech/glide/samples/flickr/FlickrModelLoader.java) in the Flickr sample project.
 
 #### Generic assets
 
