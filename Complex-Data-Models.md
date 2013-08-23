@@ -18,7 +18,7 @@ VolleyModelLoader requires you to implement two simple methods, `getId(Model mod
 
 For a simple example of a VolleyModelLoader, see [FlickrModelLoader](https://github.com/bumptech/glide/blob/master/samples/flickr/src/com/bumptech/flickr/FlickrModelLoader.java) in the Flickr sample project.
 
-#### Generic remote or local assets
+#### Generic assets
 
 If you don't use http, are loading images from local files, or don't want to use Volley, you can either use or subclass one of the other included [ModelLoaders](https://github.com/bumptech/glide/tree/master/library/src/com/bumptech/glide/loader/model), or you can implement [ModelLoader](https://github.com/bumptech/glide/blob/master/library/src/com/bumptech/glide/loader/model/ModelLoader.java) yourself. 
 
