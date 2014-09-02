@@ -23,7 +23,10 @@ public class MyUrlLoader extends BaseGlideUrlLoader<MyDataModel> {
 You can then use your custom ModelLoader to load images, and everything else works automatically:
 
 ```java
-Glide.with(yourFragment).using(new MyUrlLoader()).load(yourModel).into(yourView);
+Glide.with(yourFragment)
+    .using(new MyUrlLoader())
+    .load(yourModel)
+    .into(yourView);
 ```
 
 If you want to avoid calling ``.using(new MyUrlLoader())`` each time, you can also implement a custom [ModelLoaderFactory](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/load/model/ModelLoaderFactory.java) and register it with Glide in your Application object or in ``onCreate()`` in your Activity:
@@ -31,14 +34,17 @@ If you want to avoid calling ``.using(new MyUrlLoader())`` each time, you can al
 ```java
 @Override
 public void onCreate() {
-    Glide.get(this).register(MyDataModel.class, InputStream.class, new MyUrlLoader.Factory());
+    Glide.get(this).register(MyDataModel.class, InputStream.class, 
+        new MyUrlLoader.Factory());
 }
 ```
 
 After registering the ModelLoaderFactory, you can skip the ``.using()`` call and just call:
 
 ```java
-Glide.with(yourFragment).load(yourModel).into(yourView);
+Glide.with(yourFragment)
+    .load(yourModel)
+    .into(yourView);
 ```
  
 For another example of how to do this in practice, see Glide’s [Flickr sample app](https://github.com/bumptech/glide/blob/master/samples/flickr/src/main/java/com/bumptech/glide/samples/flickr/FlickrModelLoader.java) or Glide’s [Giphy sample app](https://github.com/bumptech/glide/blob/master/samples/giphy/src/main/java/com/bumptech/glide/samples/giphy/GiphyModelLoader.java).
