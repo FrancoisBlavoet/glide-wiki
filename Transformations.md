@@ -15,28 +15,47 @@ Center crop performs the same transformation as Android's [ScaleType.CENTER_CROP
 ### Usage
 
 To apply fit center, use:
-
 ```java
-Glide.with(yourFragment).load(yourUrl).fitCenter().into(yourView);
+Glide.with(yourFragment)
+    .load(yourUrl)
+    .fitCenter()
+    .into(yourView);
 ```
 
 For center crop, use:
 ```java
-Glide.with(yourFragment).load(yourUrl).centerCrop().into(yourView);
+Glide.with(yourFragment)
+    .load(yourUrl)
+    .centerCrop()
+    .into(yourView);
 ```
 
 You can also apply either of the default transformations if you're loading Bitmaps or GIFs:
 ```java
 // For Bitmaps:
-Glide.with(yourFragment).load(yourUrl).asBitmap().centerCrop().into(yourView);
+Glide.with(yourFragment)
+    .load(yourUrl)
+    .asBitmap()
+    .centerCrop()
+    .into(yourView);
+
 // For gifs:
-Glide.with(yourFragment).load(yourUrl).asGif().fitCenter().into(yourView);
+Glide.with(yourFragment)
+    .load(yourUrl)
+    .asGif()
+    .fitCenter()
+    .into(yourView);
 ```
 
 You can even apply transformations when transcoding between types, for example to get the jpeg encoded bytes of a transformed image, you can use:
 
 ```java
-Glide.with(yourFragment).load(yourUrl).asBitmap().toBytes().centerCrop().into(new SimpleTarget(...) { ... });
+Glide.with(yourFragment)
+    .load(yourUrl)
+    .asBitmap()
+    .toBytes()
+    .centerCrop()
+    .into(new SimpleTarget(...) { ... });
 ```
 
 ## Custom transformations
@@ -53,7 +72,8 @@ private static class MyTransformation extends BitmapTransformation {
     }
 
     @Override
-    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, 
+            int outWidth, int outHeight) {
        Bitmap myTransformedBitmap = ... // apply some transformation here.
        return myTransformedBitmap;
     }
@@ -72,11 +92,24 @@ For example:
 
 ```java
 // For the default drawable type:
-Glide.with(yourFragment).load(yourUrl).transform(new MyTransformation(context)).into(yourView);
+Glide.with(yourFragment)
+    .load(yourUrl)
+    .transform(new MyTransformation(context))
+    .into(yourView);
+
 // For Bitmaps:
-Glide.with(yourFragment).load(yourUrl).asBitmap().transform(new MyTransformation(context)).into(yourView);
+Glide.with(yourFragment)
+    .load(yourUrl)
+    .asBitmap()
+    .transform(new MyTransformation(context))
+    .into(yourView);
+
 // For Gifs:
-Glide.with(yourFragment).load(yourUrl).asGif().transform(new MyTransformation(context)).into(yourView);
+Glide.with(yourFragment)
+    .load(yourUrl)
+    .asGif()
+    .transform(new MyTransformation(context))
+    .into(yourView);
 ```
 
 ## Caveats
