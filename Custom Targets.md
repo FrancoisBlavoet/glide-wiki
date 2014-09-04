@@ -1,0 +1,3 @@
+In addition to loading images, video stills, and animated GIFs into Views, you can also load media into custom [Target](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/request/target/Target.html) implementations.
+
+Coming soon...
