@@ -17,7 +17,7 @@ int myHeight = 384;
 Glide.with(yourApplicationContext))
     .load(youUrl)
     .asBitmap()
-    .into(new SimpleTarget(myWidth, myHeight) {
+    .into(new SimpleTarget<Bitmap>(myWidth, myHeight) {
         @Override
         public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
             // Do something with bitmap here.
