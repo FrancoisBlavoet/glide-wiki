@@ -9,7 +9,7 @@ Cache keys in Glide are comprised of three main parts:
 
 * The Strings returned from the ``getId()`` methods of the various decoders and encoders used to load and cache your image. Only the decoders and encoders that affect the retrieved bytes include ids. For example if you have an encoder that simply writes a byte array to disk, that encoder will not have an id because it does not affect the data in any way.
 
-All of these keys are hashed in particular order to create a unique and safe File name to save a particular image on disk.
+All of these keys are hashed in a particular order to create a unique and safe File name to save a particular image on disk.
 
 ## Cache Invalidation
 Because File names are hashed keys, there is no good way to simply delete all of the cached files on disk that correspond to a particular url or file path. The problem would be simpler if you were only ever allowed to load or cache the original image, but since Glide also caches thumbnails and provides various transformations, each of which will result in a new File in the cache, tracking down and deleting every cached version of an image is practically impossible.
