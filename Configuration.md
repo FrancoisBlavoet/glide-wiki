@@ -1,4 +1,4 @@
-Glide allows you to configure a number of different global options that apply to all requests. To do so you use the [GlideBuilder](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/GlideBuilder.html) class. 
+Glide allows you to configure a number of different global options that apply to all requests. To do so you use the [GlideBuilder](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/GlideBuilder.html) class. 
 
 #### In your Application
 The simplest way to setup Glide is to do so in your [Application](http://developer.android.com/reference/android/app/Application.html) object in [``onCreate()``](http://developer.android.com/reference/android/app/Application.html#onCreate()):
@@ -16,7 +16,7 @@ public class MyApplication extends Application {
 ```
 
 #### In your Activity
-Alternatively you can also use Glide's [``isSetup()``](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/Glide.html#isSetup()) method to optionally setup Glide in an Activity.
+Alternatively you can also use Glide's [``isSetup()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/Glide.html#isSetup()) method to optionally setup Glide in an Activity.
 
 ```java
 public MyActivity extends Activity {
@@ -45,10 +45,10 @@ synchronized(Glide.class) {
 The synchronized block is only necessary if you start loads in the background, and typically only when you're doing so in an Activity. Calling ``Glide.setup()`` after the Glide singleton has been created either via a ``setup()`` call or via a ``Glide.get()`` or ``Glide.with()`` call will throw an ``IllegalArgumentException``.
 
 ## Disk Cache
-You can use the GlideBuilder's [``setDiskCache()``](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/GlideBuilder.html#setDiskCache(com.bumptech.glide.load.engine.cache.DiskCache)) method to set the location and/or maximum size of the disk cache. You can also disable the cache entirely using [DiskCacheAdapter](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/load/engine/cache/DiskCacheAdapter.html) or replace it with your own implementation of the [DiskCache](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/load/engine/cache/DiskCache.html) interface. 
+You can use the GlideBuilder's [``setDiskCache()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/GlideBuilder.html#setDiskCache(com.bumptech.glide.load.engine.cache.DiskCache)) method to set the location and/or maximum size of the disk cache. You can also disable the cache entirely using [DiskCacheAdapter](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/cache/DiskCacheAdapter.html) or replace it with your own implementation of the [DiskCache](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/load/engine/cache/DiskCache.html) interface. 
 
 #### Size
-You can set the size of the disk cache using the [DiskLruCacheWrapper](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/load/engine/cache/DiskLruCacheWrapper.html) singleton. To do so, you can use Glide's [``getPhotoCacheDir()``](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/Glide.html#getPhotoCacheDir(android.content.Context)) to retain the default location and then simply pass in the size you want in bytes:
+You can set the size of the disk cache using the [DiskLruCacheWrapper](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/cache/DiskLruCacheWrapper.html) singleton. To do so, you can use Glide's [``getPhotoCacheDir()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/Glide.html#getPhotoCacheDir(android.content.Context)) to retain the default location and then simply pass in the size you want in bytes:
 
 ```java
 new GlideBuilder(context)
