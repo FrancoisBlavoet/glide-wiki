@@ -22,7 +22,7 @@ Alternatively you can also use Glide's [``isSetup()``](http://bumptech.github.io
 public MyActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (Glide.isSetup()) {
+        if (!Glide.isSetup()) {
             Glide.setup(new GlideBuilder(this)
                 .setDiskCache(...)
                 .setMemoryCache(...)
@@ -36,7 +36,7 @@ Keep in mind that if you start loads in the background you should surround your 
 
 ```java
 synchronized(Glide.class) {
-    if (Glide.isSetup()) {
+    if (!Glide.isSetup()) {
         Glide.setup(...);
     }
 }
