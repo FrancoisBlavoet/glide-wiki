@@ -48,5 +48,4 @@ Although [``into(int, int)``][7] works well on background threads, note that you
 [4]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/DiskCacheStrategy.html#ALL
 [5]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/DiskCacheStrategy.html#SOURCE
 [6]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/request/FutureTarget.html
-[7]:
-http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/GenericRequestBuilder.html#into(int,%20int)
+[7]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/GenericRequestBuilder.html#into(int,%20int)
