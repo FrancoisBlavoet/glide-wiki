@@ -91,6 +91,10 @@ Glide.with(yourFragment)
         
 Whenever the data in the File changes, just increment the version number in shared preferences and all thumbnails will be regenerated, regardless of the sizes or transformations you may have applied.
         
-    
+## Signatures _(coming soon in Glide 3.4)_
 
+Since adding custom logic to change your DataFetcher's id is complicated, we've added a new [``signature()``](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/GenericRequestBuilder.java#L533) API which allows you provide a custom [``Key``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/Key.html) implementation which will be mixed in to the memory and disk cache keys, allowing you to easily invalidate a model of any type. Default implementations are included for mixing in [Strings](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/signature/StringSignature.java) and [data from the MediaStore](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/signature/MediaStoreSignature.java). 
+
+To use the signature API you need to check out top of tree on the master branch, or if using gradle or maven, depend on the SNAPSHOT version of Glide. 
+    
 
