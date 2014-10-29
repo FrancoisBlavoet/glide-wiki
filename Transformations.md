@@ -11,7 +11,6 @@ Center crop first scales your image down maintaining the original aspect ratio s
 
 Center crop performs the same transformation as Android's [ScaleType.CENTER_CROP](http://developer.android.com/reference/android/widget/ImageView.ScaleType.html)
 
-
 ### Usage
 
 To apply fit center, use [``.fitCenter()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#fitCenter()):
@@ -113,11 +112,11 @@ Glide.with(yourFragment)
 ```
 
 ### Sizing
-You may have noticed that none of the above examples include any concrete dimensions, so how does Glide determine the size that is passed in to each [Transformation](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/Transformation.html)? 
+You may have noticed that none of the above examples include any concrete dimensions, so how does Glide determine the dimensions that are passed in to each [Transformation](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/Transformation.html)? 
 
-Glide is smart enough to figure out the size of the [View](http://developer.android.com/reference/android/view/View.html) you're loading your image into and will pass the View's dimensions along with the original image you retrieve into your Transformation so you can make sure your transformation gives you exactly the output you need.
+The dimensions that are passed into each Transformation are those of the View or Target the load is for. Glide is smart enough to figure out the sizes of [Views](http://developer.android.com/reference/android/view/View.html) that use layout weights or match_parent as well as the sizes of those that have concrete dimensions. Having the dimensions of your View or Target as well as the original image allow your transformation to produce an image of exactly the right size.
 
-If you want override the View's dimensions, you can do so with the [``.override(int, int)``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#override(int, int)) method. If want to load an image for some reason other than display it in a view, see the [Custom targets](https://github.com/bumptech/glide/wiki/Custom-targets) page.
+If you want to specify custom dimensions instead of using those of your View or Target, you can do so using the [``.override(int, int)``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#override(int, int)) method. If want to load an image for some reason other than display it in a View, see the [Custom targets](https://github.com/bumptech/glide/wiki/Custom-targets) page.
 
 ## Caveats
 Currently all Transformations must be idempotent, meaning that you should get the same output if you apply your transformation once as if you were to apply it a hundred (or more than one) times in a row. This restriction should be lifted in Glide 3.4, see [Issue #116](https://github.com/bumptech/glide/issues/116) for details.
