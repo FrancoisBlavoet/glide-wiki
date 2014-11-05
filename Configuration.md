@@ -69,7 +69,13 @@ By default Glide places the disk cache in your application's cache directory and
 The GlideBuilder class allows you to set the size and implementation of Glide's [``MemoryCache``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/cache/MemoryCache.html) and [``BitmapPool``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/bitmap_recycle/BitmapPool.html). 
 
 ### Size
-Default sizes are determined by the [``MemorySizeCalculator``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/cache/MemorySizeCalculator.html) class. The MemorySizeCalculator class takes into account the screen size available memory of a given device to come up with reasonable default sizes. You can construct your own instance if you want to adjust Glide's defaults.
+Default sizes are determined by the [``MemorySizeCalculator``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/cache/MemorySizeCalculator.html) class. The MemorySizeCalculator class takes into account the screen size available memory of a given device to come up with reasonable default sizes. You can construct your own instance if you want to adjust Glide's defaults:
+
+```java
+MemorySizeCalculator calculator = new MemorySizeCalculator(context);
+int defaultMemoryCacheSize = calculator.getMemoryCacheSize();
+int defaultBitmapPoolSize = calculator.getBitmapPoolSize();
+```
 
 If you want to dynamically adjust Glide's memory footprint during certain phases of your application, you can do so by picking a [``MemoryCategory``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/MemoryCategory.html) and passing it to Glide using [``setMemoryCategory()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/Glide.html#setMemoryCategory(com.bumptech.glide.MemoryCategory)):
 
