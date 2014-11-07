@@ -103,7 +103,7 @@ new GlideBuilder(context)
     .setBitmapPool(new LruBitmapPool(sizeInBytes));
 ```
 
-## Bitmap Format (New in Glide 3.4)
+## Bitmap Format
 The GlideBuilder class also allows you to set a global default for the preferred [Bitmap configuration](http://developer.android.com/reference/android/graphics/Bitmap.Config.html) for your application. 
 
 By default Glide prefers [``RGB_565``](http://developer.android.com/reference/android/graphics/Bitmap.Config.html) because it requires only two bytes per pixel and therefore has half the memory footprint of the higher quality and system default [``ARGB_8888``](http://developer.android.com/reference/android/graphics/Bitmap.Config.html). RGB_565 however can have issues with banding in certain images and also does not support transparency.
