@@ -119,18 +119,18 @@ The dimensions that are passed into each Transformation are those of the View or
 If you want to specify custom dimensions instead of using those of your View or Target, you can do so using the [``.override(int, int)``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#override(int, int)) method. If want to load an image for some reason other than display it in a View, see the [Custom targets](https://github.com/bumptech/glide/wiki/Custom-targets) page.
 
 ### Bitmap re-use
-To reduce garbage collections, you can use the provided [``BitmapPool``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/bitmap_recycle/BitmapPool.html) interface to release unwanted [``Bitmaps``](http://developer.android.com/reference/android/graphics/Bitmap.html) or re-use existing Bitmaps. Typically you re-use a Bitmap in a Transformation by obtaining a Bitmap from the pool, using the Bitmap from the pool to back a [``Canvas``](http://developer.android.com/reference/android/graphics/Canvas.html), and then drawing your original Bitmap onto the Canvas using a [Matrix](http://developer.android.com/reference/android/graphics/Matrix.html), [Paint](http://developer.android.com/reference/android/graphics/Paint.html), or [Shader](http://www.curious-creature.org/2012/12/11/android-recipe-1-image-with-rounded-corners/) to transform the image. To efficiently and correctly re-use Bitmaps in Transformations that are a couple of rules to follow:
+To reduce garbage collections, you can use the provided [``BitmapPool``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/bitmap_recycle/BitmapPool.html) interface to release unwanted [``Bitmaps``](http://developer.android.com/reference/android/graphics/Bitmap.html) or re-use existing Bitmaps. Typically you re-use a Bitmap in a Transformation by getting a Bitmap from the pool, using the Bitmap from the pool to back a [``Canvas``](http://developer.android.com/reference/android/graphics/Canvas.html), and then drawing your original Bitmap onto the Canvas using a [Matrix](http://developer.android.com/reference/android/graphics/Matrix.html), [Paint](http://developer.android.com/reference/android/graphics/Paint.html), or [Shader](http://www.curious-creature.org/2012/12/11/android-recipe-1-image-with-rounded-corners/) to transform the image. To efficiently and correctly re-use Bitmaps in Transformations that are a couple of rules to follow:
 
 1. Never recycle the Resource or return to the BitmapPool the Bitmap you are given in ``transform()``, this is done automatically. 
-2. If you obtain more than one Bitmap from the BitmapPool or do not use a Bitmap you obtain from the BitmapPool, be sure to return any extras to the BitmapPool.
+2. If you get more than one Bitmap from the BitmapPool or do not use a Bitmap you get from the BitmapPool, be sure to return any extras to the BitmapPool.
 3. If your Transformation does not replace the original resource (for example if your Transformation returns early because an image already matches the size you need), return the original Resource or Bitmap from the ``transform()`` method.
  
 A typical pattern looks something like this:
 
 ```java
 protected Bitmap transform(BitmapPool bitmapPool, Bitmap original, int width, int height) {
-    Bitmap result = bitmapPool.obtain(width, height, Bitmap.Config.ARGB_8888);
-    // If no matching Bitmap is in the pool, obtain will return null, so we should allocate.
+    Bitmap result = bitmapPool.get(width, height, Bitmap.Config.ARGB_8888);
+    // If no matching Bitmap is in the pool, get will return null, so we should allocate.
     if (result == null) {
         // Use ARGB_8888 since we're going to add alpha to the image.
         result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
