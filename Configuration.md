@@ -1,48 +1,55 @@
-Glide allows you to configure a number of different global options that apply to all requests. To do so you use the [GlideBuilder](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/GlideBuilder.html) class. 
+# Lazily apply configuration changes using GlideModules.
+Starting in Glide 3.5, you can use the [``GlideModule``][1] interface to lazily configure Glide and register components like [``ModelLoaders``][2] automatically when the first Glide request is made.
 
-#### In your Application
-The simplest way to setup Glide is to do so in your [Application](http://developer.android.com/reference/android/app/Application.html) object in [``onCreate()``](http://developer.android.com/reference/android/app/Application.html#onCreate()):
+## Including a GlideModule
+To use and register a GlideModule, first implement the interface with your configuration and components:
 
 ```java
-public class MyApplication extends Application {
+public class MyGlideModule implements GlideModule {
     @Override
-    public void onCreate() {
-        Glide.setup(new GlideBuilder(this)
-            .setDiskCache(...)
-            .setMemoryCache(...)
-        );
+    public void applyOptions(Context context, GlideBuilder builder) {
+        // Apply options to the builder here.
     }
-}
-```
-
-#### In your Activity
-Alternatively you can also use Glide's [``isSetup()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/Glide.html#isSetup()) method to optionally setup Glide in an Activity.
-
-```java
-public MyActivity extends Activity {
+   
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        if (!Glide.isSetup()) {
-            Glide.setup(new GlideBuilder(this)
-                .setDiskCache(...)
-                .setMemoryCache(...)
-            );
-        }
-    }
-}
-```
-#### With background loads
-Keep in mind that if you start loads in the background you should surround your ``Glide.isSetup()`` and ``Glide.setup()`` with a ``synchronized`` block:
-
-```java
-synchronized(Glide.class) {
-    if (!Glide.isSetup()) {
-        Glide.setup(...);
+    public void registerComponents(Context context, Glide glide) {
+        // register ModelLoaders here.
     }
 }
 ```
 
-The synchronized block is only necessary if you start loads in the background, and typically only when you're doing so in an Activity. Calling ``Glide.setup()`` after the Glide singleton has been created either via a ``setup()`` call or via a ``Glide.get()`` or ``Glide.with()`` call will throw an ``IllegalArgumentException``.
+Then add your implementation class to your ``proguard.cfg`` file to allow your module to be instantiated via reflection. The performance overhead is minimal because each module is instantiated a single time when the first request with Glide is made.
+
+```
+-keepnames class * com.mypackage.MyGlideModule
+```
+
+Finally add a meta-data tag to your ``AndroidManifest.xml`` file so Glide can find your module:
+
+```xml
+<meta-data
+    android:name="com.bumptech.glide.samples.flickr.FlickrGlideModule"
+    android:value="GlideModule" />
+```
+
+You can implement as many GlideModules as you like, although each one must be added to proguard.cfg and each one must have its own meta-data tag in the manifest.
+
+## Library projects
+
+Library projects may define one or more GlideModules. If a library project adds a module to its manifest, applications built using Gradle (or any system with a manifest merger) that depend on the library project will automatically pick up the library's module. If no manifest merger is available, the library module will have to be manually listed in the application's manifest.
+
+## Conflicting GlideModules
+
+Although Glide allows multiple GlideModules per application, Glide doesn't call registered GlideModules in any particular order. As a result, users ares responsible for avoiding conflicts between GlideModules if their application defines more than one GlideModule or depends on multiple libraries that define GlideModules.
+
+If a conflict is unavoidable, applications should default to defining their own module that manually resolves the conflict and provides all dependencies required by the library modules. Gradle users, or any other user using a manifest merger, can exclude conflicting modules by adding a tag to their ``AndroidManifest.xml`` to exclude the corresponding meta-data tags:
+
+```xml
+<meta-data android:name=”com.mypackage.MyGlideModule” tools:node=”remove”/>
+```
+
+# Global configuration is exposed via the GlideBuilder class
+Glide allows you to configure a number of different global options that apply to all requests. To do so you use the [GlideBuilder](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/GlideBuilder.html) provided to you in ``GlideModule#applyOptions``.
 
 ## Disk Cache
 You can use the GlideBuilder's [``setDiskCache()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/GlideBuilder.html#setDiskCache(com.bumptech.glide.load.engine.cache.DiskCache)) method to set the location and/or maximum size of the disk cache. You can also disable the cache entirely using [DiskCacheAdapter](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/cache/DiskCacheAdapter.html) or replace it with your own implementation of the [DiskCache](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/load/engine/cache/DiskCache.html) interface. 
@@ -114,3 +121,6 @@ If banding is a problem in your application and/or you want the highest possible
 new GlideBuilder(context)
     .setDecodeFormat(DecodeFormat.ALWAYS_ARGB_8888);
 ```
+
+[1]: https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/module/GlideModule.java
+[2]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/model/ModelLoader.html
