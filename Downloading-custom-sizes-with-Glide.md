@@ -29,13 +29,16 @@ Glide.with(yourFragment)
     .into(yourView);
 ```
 
-If you want to avoid calling ``.using(new MyUrlLoader())`` each time, you can also implement a custom [ModelLoaderFactory](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/load/model/ModelLoaderFactory.java) and register it with Glide in your Application object or in ``onCreate()`` in your Activity:
+If you want to avoid calling ``.using(new MyUrlLoader())`` each time, you can also implement a custom [ModelLoaderFactory](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/load/model/ModelLoaderFactory.java) and register it with Glide in your [``GlideModule``][1].
 
 ```java
-@Override
-public void onCreate() {
-    Glide.get(this).register(MyDataModel.class, InputStream.class, 
-        new MyUrlLoader.Factory());
+public class MyGlideModule implements GlideModule {
+    ...
+    @Override
+    public void registerComponents(Context context, Glide glide) {
+        glide.register(MyDataModel.class, InputStream.class, 
+            new MyUrlLoader.Factory());
+    }
 }
 ```
 
@@ -47,4 +50,6 @@ Glide.with(yourFragment)
     .into(yourView);
 ```
  
-For another example of how to do this in practice, see Glide’s [Flickr sample app](https://github.com/bumptech/glide/blob/master/samples/flickr/src/main/java/com/bumptech/glide/samples/flickr/FlickrModelLoader.java) or Glide’s [Giphy sample app](https://github.com/bumptech/glide/blob/master/samples/giphy/src/main/java/com/bumptech/glide/samples/giphy/GiphyModelLoader.java).
+For another example of how to load a variety of image sizes using a custom ModelLoader, see Glide’s [Flickr sample app](https://github.com/bumptech/glide/blob/master/samples/flickr/src/main/java/com/bumptech/glide/samples/flickr/FlickrModelLoader.java) or Glide’s [Giphy sample app](https://github.com/bumptech/glide/blob/master/samples/giphy/src/main/java/com/bumptech/glide/samples/giphy/GiphyModelLoader.java).
+
+[1]: https://github.com/bumptech/glide/wiki/Configuration
