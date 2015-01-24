@@ -10,13 +10,102 @@ Because you haven't written the integration library for it yet! OkHttp and Volle
 ## How do I depend on an integration library?
 There are two parts to depending on any integration library. First you need to include the corresponding Maven, Gradle, or jar dependency because the optional integration libraries are not included by default.
 
-Second, you need to make sure your app includes the integration library's [GlideModule][5]. For more information on GlideModules, see the [Configuration][6] wiki page.
+Second, you need to make sure your app includes the integration library's [GlideModule][5]. For more information on GlideModules, see the [Configuration][6] wiki page. For specific instructions for each of Glide's current integration libraries, see below.
+
+## Using Volley
+1. To use Volley, you need to first include the corresponding dependencies.
+
+    With Gradle:
+    ```groovy
+    dependencies {
+        compile 'com.github.bumptech.glide:volley-integration:1.1.0'
+        compile 'com.mcxiaoke.volley:library:1.0.5'
+    }
+    ```
+
+    With Maven:
+    ```xml
+    <dependency>
+        <groupId>com.github.bumptech.glide</groupId>
+        <artifactId>volley-integration</artifactId>
+        <version>1.1.0</version>
+        <type>aar</type>
+    </dependency>
+    <dependency>
+        <groupId>com.mcxiaoke.volley</groupId>
+        <artifactId>library</artifactId>
+        <version>1.0.5</version>
+        <type>aar</type>
+    </dependency>
+    ```
+
+    Or download a jar from the [releases page][7].
+
+2. Include the Volley integration library's GlideModule.
+    1. Include the GlideModule metadata tag in your ``AndroidManifest.xml``.
+        
+        If you build with **Gradle** or any other build system that supports manifest merging and depend on the aar version of the Volley integration library, the integration library's GlideModule will be merged into your application's manifest automatically.
+
+        If you build with Maven, Ant, or any build system that does not support manifest merging, you must manually add a metadata tag to your manifest:
+        ```xml
+        <meta-data
+            android:name="com.bumptech.glide.integration.volley.VolleyGlideModule"
+            android:value="GlideModule" />
+        ```
+    2. Add a proguard keep for the VolleyGlideModule class.
+        
+        Regardless of the build system you use, you need to make sure proguard doesn't obfuscate or strip the VolleyGlideModule class so it can be instantiated using reflection. Add the following to your proguard.cfg file:
+        ```
+        -keepnames class * com.bumptech.glide.integration.volley.VolleyGlideModule
+        ```
 
 ## OkHttp
-Instructions coming soon...
 
-## Volley
-Instructions coming soon...
+1. To use OkHttp, you need to first include the corresponding dependencies.
+
+    With Gradle:
+    ```groovy
+    dependencies {
+        compile 'com.github.bumptech.glide:okhttp-integration:1.1.0'
+        compile 'com.squareup.okhttp:okhttp:2.0.0'
+    }
+    ```
+
+    With Maven:
+    ```xml
+    <dependency>
+        <groupId>com.github.bumptech.glide</groupId>
+        <artifactId>okhttp-integration</artifactId>
+        <version>1.1.0</version>
+        <type>aar</type>
+    </dependency>
+    <dependency>
+        <groupId>com.squareup.okhttp</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>2.0.0</version>
+        <type>jar</type>
+    </dependency>
+    ```
+
+    Or download a jar from the [releases page][7].
+
+2. Include the OkHttp integration library's GlideModule.
+    1. Include the GlideModule metadata tag in your ``AndroidManifest.xml``.
+        
+        If you build with **Gradle** or any other build system that supports manifest merging and depend on the aar version of the OkHttp integration library, the integration library's GlideModule will be merged into your application's manifest automatically.
+
+        If you build with Maven, Ant, or any build system that does not support manifest merging, you must manually add a metadata tag to your manifest:
+        ```xml
+        <meta-data
+            android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
+            android:value="GlideModule" />
+        ```
+    2. Add a proguard keep for the OkHttpGlideModule class.
+        
+        Regardless of the build system you use, you need to make sure proguard doesn't obfuscate or strip the VolleyGlideModule class so it can be instantiated using reflection. Add the following to your proguard.cfg file:
+        ```
+        -keepnames class * com.bumptech.glide.integration.okhttp.OkHttpGlideModule
+        ```
 
 [1]: http://developer.android.com/training/volley/index.html
 [2]: http://square.github.io/okhttp/
@@ -24,3 +113,4 @@ Instructions coming soon...
 [4]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/model/ModelLoader.html
 [5]: https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/module/GlideModule.java
 [6]: https://github.com/bumptech/glide/wiki/Configuration
+[7]: https://github.com/bumptech/glide/releases
