@@ -1,5 +1,5 @@
 ## Default Transformations
-Glide includes two default transformations, fit center and center crop.
+Glide includes two default transformations, fit center and center crop. For other types of transformations you may want to consider an [unaffiliated transformations library][1].
 
 ### [Fit center](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/resource/bitmap/FitCenter.html) 
 Fit center scales your image down maintaining the original aspect ratio of the image so that the image fits entirely within the given width and height. Fit center performs the minimal possible scale so that one dimension of the image exactly matches the given width or height and the other dimension of the image is less than or equal to the given width or height. 
@@ -147,7 +147,4 @@ protected Bitmap transform(BitmapPool bitmapPool, Bitmap original, int width, in
 }
 ```
 
-## Caveats
-Currently all Transformations must be idempotent, meaning that you should get the same output if you apply your transformation once as if you were to apply it a hundred (or more than one) times in a row. This restriction should be lifted in Glide 3.4, see [Issue #116](https://github.com/bumptech/glide/issues/116) for details.
-
-The workaround for now if you need to have a transformation that is not idempotent is to use ``.diskCacheStrategy(DiskCacheStrategy.SOURCE)``. Using that [DiskCacheStrategy](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/DiskCacheStrategy.html) will only cache the source of your images, not the transformed thumbnails and will therefore make sure that your transformations are only applied once.
+[1]: https://github.com/wasabeef/glide-transformations
