@@ -1,14 +1,14 @@
 Cache invalidation is a relatively complex topic and ideally you have to think about it as little as possible. The goal of this page is to give you a rough idea of how cache keys are generated in Glide and some hints as to how to make the cache work best for you.
 
 ## Cache Keys
-Cache keys in Glide are comprised of three main parts:
+Cache keys in Glide are comprised of four main parts:
 
 * The String returned from the [``getId()``][1] method in DataFetcher - Defaults to the String version of the model you provide, so your url if you provide a url, or your file path if you provide a file path etc.
 
 * The width and height passed in to the [``override(int, int)``][2] method if called, or by default the width and height provided by your [Target's ``getSize()`` method.][3]
 * The Strings returned from the ``getId()`` methods of the various decoders and encoders used to load and cache your image. Only the decoders and encoders that affect the retrieved bytes include ids. For example if you have an encoder that simply writes a byte array to disk, that encoder will not have an id because it does not affect the data in any way.
 
-* Any signature you may have applied to the load (see Custom cache invalidation below). 
+* An optional signature you may apply to each load (see Custom cache invalidation below). 
 
 All of these keys are hashed in a particular order to create a unique and safe File name to save a particular image on disk.
 
