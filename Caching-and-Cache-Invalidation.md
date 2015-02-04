@@ -20,7 +20,7 @@ In practice, the best way to invalidate a cache file is to change your identifie
 ## Custom cache invalidation
 Since it's often difficult or impossible to change identifiers, Glide also offers the [``signature()``][9] API to mix in additional data that you control into your cache key. Signatures work well for media store content, as well as any content you can maintain some versioning metadata for.
 
-* Media store content - For media store content, you can use Glide's [``MediaStoreSignature``][5] class as your signature. MediaStoreSignature allows you to mix the date modified time, mime type, and orientation of a media store item into the cache key. These three attributes reliably catch edits and updates allowing you to cache media store thumbs.
+* Media store content - For media store content, you can use Glide's [``MediaStoreSignature``][12] class as your signature. MediaStoreSignature allows you to mix the date modified time, mime type, and orientation of a media store item into the cache key. These three attributes reliably catch edits and updates allowing you to cache media store thumbs.
 
 * Files - You can use [``StringSignature``][11] to mix in the File's date modified time.
 
