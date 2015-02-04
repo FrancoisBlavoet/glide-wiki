@@ -116,7 +116,7 @@ Glide.with(fragment)
 [2]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#override(int,%20int)
 [3]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/request/target/Target.html#getSize(com.bumptech.glide.request.target.SizeReadyCallback)
 [4]: https://github.com/bumptech/glide/wiki/Caching-and-Cache-Invalidation#signatures
-[5]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/RequestManager.html#loadFromMediaStore(android.net.Uri, java.lang.String,%20long,%20int)
+[5]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/RequestManager.html#loadFromMediaStore(android.net.Uri,%20java.lang.String,%20long,%20int)
 [6]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/model/ModelLoader.html
 [7]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html
 [8]: http://developer.android.com/reference/android/content/SharedPreferences.html
