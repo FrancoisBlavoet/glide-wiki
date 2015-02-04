@@ -8,7 +8,7 @@ Cache keys in Glide are comprised of three main parts:
 * The width and height passed in to the [``override(int, int)``][2] method if called, or by default the width and height provided by your [Target's ``getSize()`` method.][3]
 * The Strings returned from the ``getId()`` methods of the various decoders and encoders used to load and cache your image. Only the decoders and encoders that affect the retrieved bytes include ids. For example if you have an encoder that simply writes a byte array to disk, that encoder will not have an id because it does not affect the data in any way.
 
-* Any [``signature``][4] you may have applied to the load. 
+* Any signature you may have applied to the load (see Custom cache invalidation below). 
 
 All of these keys are hashed in a particular order to create a unique and safe File name to save a particular image on disk.
 
@@ -82,7 +82,6 @@ If all else fails and you can neither change your identifier nor keep track of a
 [1]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html#getId()
 [2]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#override(int,%20int)
 [3]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/request/target/Target.html#getSize(com.bumptech.glide.request.target.SizeReadyCallback)
-[4]: https://github.com/bumptech/glide/wiki/Caching-and-Cache-Invalidation#signatures
 [6]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/model/ModelLoader.html
 [7]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html
 [8]: http://developer.android.com/reference/android/content/SharedPreferences.html
