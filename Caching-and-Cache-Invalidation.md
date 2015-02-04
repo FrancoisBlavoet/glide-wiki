@@ -3,11 +3,12 @@ Cache invalidation is a relatively complex topic and ideally you have to think a
 ## Cache Keys
 Cache keys in Glide are comprised of three main parts:
 
-* The String returned from the [``getId()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html#getId()) method in DataFetcher - Defaults to the String version of the model you provide, so your url if you provide a url, or your file path if you provide a file path etc.
+* The String returned from the [``getId()``][1] method in DataFetcher - Defaults to the String version of the model you provide, so your url if you provide a url, or your file path if you provide a file path etc.
 
-* The width and height passed in to the [``override(int, int)``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#override(int, int)) method if called, or by default the width and height provided by your [Target's ``getSize()`` method.](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/request/target/Target.html#getSize(com.bumptech.glide.request.target.SizeReadyCallback))
-
+* The width and height passed in to the [``override(int, int)``][2] method if called, or by default the width and height provided by your [Target's ``getSize()`` method.][3]
 * The Strings returned from the ``getId()`` methods of the various decoders and encoders used to load and cache your image. Only the decoders and encoders that affect the retrieved bytes include ids. For example if you have an encoder that simply writes a byte array to disk, that encoder will not have an id because it does not affect the data in any way.
+
+* Any [``signature``][4] you may have applied to the load. 
 
 All of these keys are hashed in a particular order to create a unique and safe File name to save a particular image on disk.
 
@@ -18,14 +19,14 @@ In practice, the best way to invalidate a cache file is to make sure the String 
 
 * Urls - For urls you can invalidate your cache keys by changing your url when you change the image, usually by adding some version or timestamp to the url that changes when the corresponding image changes.
 
-* Media store content - For media store content, you can use Glide's [``loadFromMediaStore(...)``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/RequestManager.html#loadFromMediaStore(android.net.Uri, java.lang.String, long, int)) method, which mixes in the date modified time, mime type, and orientation into the cache key to cache updates and edits.
+* Media store content - For media store content, you can use Glide's [``loadFromMediaStore(...)``][5] method, which mixes in the date modified time, mime type, and orientation into the cache key to cache updates and edits.
 
 * Other local content - For any non media store content, you can invalidate your cache keys in the same way Glide invalidates media store content by mixing in some data that identifies when the image changed, like the date modified time on the File, exif data etc. To do so, you will need to implement two simple interfaces as described below.
 
 ## Custom Cache Invalidation
-Although ideally you can always invalidate your cached media by changing the identifies (urls, file paths etc) directly, you you can also relatively easily write your own [ModelLoader](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/model/ModelLoader.html) and [DataFetcher](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html) implementations to mix in some additional data so you can have more fine grained control over invalidation.
+Although ideally you can always invalidate your cached media by changing the identifies (urls, file paths etc) directly, you you can also relatively easily write your own [ModelLoader][6] and [DataFetcher][7] implementations to mix in some additional data so you can have more fine grained control over invalidation.
 
-Here's an example that invalidates local files by keeping a version number per file in [SharedPreferences](http://developer.android.com/reference/android/content/SharedPreferences.html):
+Here's an example that invalidates local files by keeping a version number per file in [SharedPreferences][8]:
 
 First define a POJO data model containing your local file and some key that can be used to retrieve the version from SharedPreferences:
 
@@ -93,7 +94,7 @@ Whenever the data in the File changes, just increment the version number in shar
         
 ## Signatures
 
-Since adding custom logic to change your DataFetcher's id is complicated, we've added a new [``signature()``](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/GenericRequestBuilder.java#L533) API which allows you provide a custom [``Key``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/Key.html) implementation which will be mixed in to the memory and disk cache keys, allowing you to easily invalidate a model of any type. Default implementations are included for mixing in [Strings](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/signature/StringSignature.java):
+Since adding custom logic to change your DataFetcher's id is complicated, we've added a new [``signature()``][9] API which allows you provide a custom [``Key``][10] implementation which will be mixed in to the memory and disk cache keys, allowing you to easily invalidate a model of any type. Default implementations are included for mixing in [Strings][11]:
 
 ```java
 Glide.with(fragment)
@@ -102,7 +103,7 @@ Glide.with(fragment)
     .into(view);
 ```
 
-And also for mixing in [data from the MediaStore](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/signature/MediaStoreSignature.java):
+And also for mixing in [data from the MediaStore][12]:
 
 ```java
 Glide.with(fragment)
@@ -110,3 +111,16 @@ Glide.with(fragment)
     .signature(new MediaStoreSignature(mimeType, dateModified, orientation))
     .into(view);
 ```
+
+[1]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html#getId()
+[2]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#override(int,%20int)
+[3]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/request/target/Target.html#getSize(com.bumptech.glide.request.target.SizeReadyCallback)
+[4]: https://github.com/bumptech/glide/wiki/Caching-and-Cache-Invalidation#signatures
+[5]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/RequestManager.html#loadFromMediaStore(android.net.Uri, java.lang.String,%20long,%20int)
+[6]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/model/ModelLoader.html
+[7]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html
+[8]: http://developer.android.com/reference/android/content/SharedPreferences.html
+[9]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#signature(com.bumptech.glide.load.Key)
+[10]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/Key.html
+[11]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/signature/StringSignature.html
+[12]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/signature/MediaStoreSignature.html
