@@ -1,3 +1,6 @@
+### Report an issue
+To report an issue, [create a report][1] on Github, send an email to our [mailing list][2], or let us know in our irc channel: [irc.freenode.net#glide-library][3].
+
 ### What's new in 3.0
 Glide 3.0 includes a large number of new features. Some of the more notable features include:
 * **Animated GIF decoding** - Just use the same ``Glide.with(...).load(...)`` call and if the image you load is an animated GIF, Glide will load and display a custom animated drawable containing the gif. For more control you can use ``Glide.with(context).load(...).asBitmap()`` to always load a static image, or ``Glide.with(context).load(...).asGif()`` to fail unless the image is an animated gif.
@@ -48,3 +51,7 @@ In addition to the new features introduced in the the 3.x version, Glide carries
 * Bitmap and resource pooling to minimize jank.
 
 * Arbitrary transformations.
+
+[1]: https://github.com/bumptech/glide/issues/new?body=**Glide%20Version/Integration%20library%20(if%20any)**:%0A**Device/Android%20Version**:%0A**Issue%20details/Repro%20steps**:%0A%0A**Glide%20load%20line**:%0A```%0AGlide.with(context)...%3B%0A```%0A%0A**Stack%20trace**:%0A```%0Apaste%20stack%20trace%20here%0A```
+[2]: https://groups.google.com/forum/#!forum/glidelibrary
+[3]: http://webchat.freenode.net/?channels=glide-library
