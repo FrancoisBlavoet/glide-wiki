@@ -18,7 +18,7 @@ Second, you need to make sure your app includes the integration library's [Glide
     With Gradle:
     ```groovy
     dependencies {
-        compile 'com.github.bumptech.glide:volley-integration:1.1.0'
+        compile 'com.github.bumptech.glide:volley-integration:1.2.2'
         compile 'com.mcxiaoke.volley:library:1.0.5'
     }
     ```
@@ -28,7 +28,7 @@ Second, you need to make sure your app includes the integration library's [Glide
     <dependency>
         <groupId>com.github.bumptech.glide</groupId>
         <artifactId>volley-integration</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.2</version>
         <type>aar</type>
     </dependency>
     <dependency>
@@ -66,7 +66,7 @@ Second, you need to make sure your app includes the integration library's [Glide
     With Gradle:
     ```groovy
     dependencies {
-        compile 'com.github.bumptech.glide:okhttp-integration:1.1.0'
+        compile 'com.github.bumptech.glide:okhttp-integration:1.2.2'
         compile 'com.squareup.okhttp:okhttp:2.0.0'
     }
     ```
@@ -76,7 +76,7 @@ Second, you need to make sure your app includes the integration library's [Glide
     <dependency>
         <groupId>com.github.bumptech.glide</groupId>
         <artifactId>okhttp-integration</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.2</version>
         <type>aar</type>
     </dependency>
     <dependency>
