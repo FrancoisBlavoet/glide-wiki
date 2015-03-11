@@ -1,7 +1,7 @@
 Cache invalidation is a relatively complex topic and ideally you have to think about it as little as possible. The goal of this page is to give you a rough idea of how cache keys are generated in Glide and some hints as to how to make the cache work best for you.
 
 ## Cache Keys
-Cache keys in Glide are comprised of four main parts:
+Cache keys used for [``DiskCacheStrategy.RESULT``][15] in Glide are comprised of four main parts:
 
 * The String returned from the [``getId()``][1] method in DataFetcher. Typically DataFetchers simply return the result of calling ``toString()`` on your data model, so the string version of your ``URL`` if you provide a ``URL``, or the file path if you provide a ``File`` etc.
 
@@ -92,3 +92,4 @@ If all else fails and you can neither change your identifier nor keep track of a
 [12]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/signature/MediaStoreSignature.html
 [13]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy)
 [14]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/DiskCacheStrategy.html#NONE
+[15]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/DiskCacheStrategy.html#RESULT
