@@ -49,28 +49,37 @@ If a conflict is unavoidable, applications should default to defining their own 
 ```
 
 # Global configuration is exposed via the GlideBuilder class
-Glide allows you to configure a number of different global options that apply to all requests. To do so you use the [GlideBuilder](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/GlideBuilder.html) provided to you in ``GlideModule#applyOptions``.
+Glide allows you to configure a number of different global options that apply to all requests. To do so you use the [GlideBuilder][3] provided to you in ``GlideModule#applyOptions``.
 
 ## Disk Cache
-You can use the GlideBuilder's [``setDiskCache()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/GlideBuilder.html#setDiskCache(com.bumptech.glide.load.engine.cache.DiskCache)) method to set the location and/or maximum size of the disk cache. You can also disable the cache entirely using [DiskCacheAdapter](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/cache/DiskCacheAdapter.html) or replace it with your own implementation of the [DiskCache](http://bumptech.github.io/glide/javadocs/330/com/bumptech/glide/load/engine/cache/DiskCache.html) interface. 
+You can use the GlideBuilder's [``setDiskCache()``][4] method to set the location and/or maximum size of the disk cache. You can also disable the cache entirely using [DiskCacheAdapter][5] or replace it with your own implementation of the [DiskCache][6] interface. Disk caches are built on background threads to avoid strict mode violations using the [DiskCache.Factory][7] interface.
+
+By default Glide uses the [InternalCacheDiskCacheFactory][9] class to build disk caches. The internal cache factory places the disk cache in your application's internal cache directory and sets a maximum size of 250mb. Using the cache directory rather than the external sd card means no other applications will be able to access the images you download. See Android's [Storage Options][10] doc for more details.
 
 #### Size
-You can set the size of the disk cache using the [DiskLruCacheWrapper](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/cache/DiskLruCacheWrapper.html) singleton. To do so, you can use Glide's [``getPhotoCacheDir()``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/Glide.html#getPhotoCacheDir(android.content.Context)) to retain the default location and then simply pass in the size you want in bytes:
+You can set the size of the disk cache using the [InternalCacheDiskCacheFactory][9]:
 
 ```java
 new GlideBuilder(context)
-    .setDiskCache(DiskLruCacheWrapper.get(Glide.getPhotoCacheDir(context), yourSizeInBytes));
+    .setDiskCache(new InternalCacheDiskCacheFactory(context, yourSizeInBytes));
 ```
 
 #### Location
-You can also use the DiskLruCacheWrapper to change the default location in the same manner as above:
+Setting the location of the disk cache is also possible. You can implement the [DiskCache.Factory][7] interface yourself, and use the [DiskLruCacheWrapper][11] to create a new cache in your desired location. For example, if you're retrieving content that can be publicly visible, you can use the following to cache files in the external cache directory on the sdcard:
 
 ```java
 new GlideBuilder(context)
-    .setDiskCache(DiskLruCacheWrapper.get(yourCacheLocation, yourSizeInBytes));
+    .setDiskCache(new DiskCache.Factory() {
+        @Override
+        public DiskCache build() { 
+            // Careful: the external cache directory doesn't enforce permissions
+            File cacheLocation = new File(context.getExternalCacheDir(), "cache_dir_name");
+            cacheLocation.mkdirs();
+            return DiskLruCacheWrapper.get(cacheLocation, yourSizeInBytes);
+        }
+    });
+);
 ```
-
-By default Glide places the disk cache in your application's cache directory and sets a maximum size of 250mb. Using the cache directory rather than the external sd card means no other applications will be able to access the images you download. See Android's [Storage Options](http://developer.android.com/guide/topics/data/data-storage.html#filesInternal) doc for more details.
 
 ## In memory caches and pools
 The GlideBuilder class allows you to set the size and implementation of Glide's [``MemoryCache``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/cache/MemoryCache.html) and [``BitmapPool``](http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/bitmap_recycle/BitmapPool.html). 
@@ -123,4 +132,13 @@ new GlideBuilder(context)
 ```
 
 [1]: https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/module/GlideModule.java
-[2]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/model/ModelLoader.html
+[2]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/model/ModelLoader.html
+[3]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/GlideBuilder.html
+[4]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/GlideBuilder.html#setDiskCache(com.bumptech.glide.load.engine.cache.DiskCache.Factory)
+[5]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/cache/DiskCacheAdapter.html
+[6]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/cache/DiskCache.html
+[7]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/cache/DiskCache.Factory.html
+[8]: http://developer.android.com/reference/android/content/Context.html#getCacheDir()
+[9]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/cache/InternalCacheDiskCacheFactory.html
+[10]: http://developer.android.com/guide/topics/data/data-storage.html#filesInternal
+[11]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/cache/DiskLruCacheWrapper.html
