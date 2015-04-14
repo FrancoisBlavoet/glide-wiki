@@ -34,6 +34,7 @@ dependencies {
 ```
 
 ### Maven
+This is untested and taken from a [Stack Overflow][4] question. Suggestions on improving this section are particularly welcome!
 
 Add the following to your ``~/.m2/settings.xml``:
 
@@ -72,3 +73,4 @@ Then change your dependencies to the snapshot version:
 [1]: https://oss.sonatype.org/content/repositories/snapshots/
 [2]: https://travis-ci.org/bumptech/glide
 [3]: https://oss.sonatype.org/content/repositories/snapshots/com/github/bumptech/glide/
+[4]: http://stackoverflow.com/questions/7715321/how-to-download-snapshot-version-from-maven-snapshot-repository
