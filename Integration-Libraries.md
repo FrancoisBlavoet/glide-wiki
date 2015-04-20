@@ -54,9 +54,11 @@ Second, you need to make sure your app includes the integration library's [Glide
         ```
     2. Add a proguard keep for the VolleyGlideModule class.
         
-        Regardless of the build system you use, you need to make sure proguard doesn't obfuscate or strip the VolleyGlideModule class so it can be instantiated using reflection. Add the following to your proguard.cfg file:
+        Regardless of the build system you use, you need to make sure proguard doesn't obfuscate or strip the VolleyGlideModule class so it can be instantiated using reflection. Add one of the following to your proguard.cfg file:
         ```
-        -keepnames class * com.bumptech.glide.integration.volley.VolleyGlideModule
+        -keep class com.bumptech.glide.integration.volley.VolleyGlideModule
+        #or
+        -keep public class * implements com.bumptech.glide.module.GlideModule
         ```
 
 ## OkHttp
@@ -102,9 +104,11 @@ Second, you need to make sure your app includes the integration library's [Glide
         ```
     2. Add a proguard keep for the OkHttpGlideModule class.
         
-        Regardless of the build system you use, you need to make sure proguard doesn't obfuscate or strip the VolleyGlideModule class so it can be instantiated using reflection. Add the following to your proguard.cfg file:
+        Regardless of the build system you use, you need to make sure proguard doesn't obfuscate or strip the VolleyGlideModule class so it can be instantiated using reflection. Add one the following to your proguard.cfg file:
         ```
-        -keepnames class * com.bumptech.glide.integration.okhttp.OkHttpGlideModule
+        -keep class com.bumptech.glide.integration.okhttp.OkHttpGlideModule
+        #or
+        -keep public class * implements com.bumptech.glide.module.GlideModule
         ```
 
 [1]: http://developer.android.com/training/volley/index.html
