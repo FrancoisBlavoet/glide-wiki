@@ -104,7 +104,7 @@ Second, you need to make sure your app includes the integration library's [Glide
         ```
     2. Add a proguard keep for the OkHttpGlideModule class.
         
-        Regardless of the build system you use, you need to make sure proguard doesn't obfuscate or strip the VolleyGlideModule class so it can be instantiated using reflection. Add one the following to your proguard.cfg file:
+        Regardless of the build system you use, you need to make sure proguard doesn't obfuscate or strip the OkHttpGlideModule class so it can be instantiated using reflection. Add one the following to your proguard.cfg file:
         ```
         -keep class com.bumptech.glide.integration.okhttp.OkHttpGlideModule
         #or
