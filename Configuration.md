@@ -65,15 +65,30 @@ new GlideBuilder(context)
 ```
 
 #### Location
-Setting the location of the disk cache is also possible. You can implement the [DiskCache.Factory][7] interface yourself, and use the [DiskLruCacheWrapper][11] to create a new cache in your desired location. For example, if you're retrieving content that can be publicly visible, you can use the following to cache files in the external cache directory on the sdcard:
+Setting the location of the disk cache is also possible. 
+
+You can use the built in [InternalCacheDiskCacheFactory][9] to place your cache in your applications private internal cache directory:
+
+```java
+new GlideBuilder(context)
+    .setDiskCache(new InternalCacheDiskCacheFactory(context, cacheDirectoryName, yourSizeInBytes));
+```
+
+You can also use the built in [ExternalCacheDiskCacheFactory][12] to place your cache in your applications public cache directory on the sd card:
+
+```java
+new GlideBuilder(context)
+    .setDiskCache(new ExternalCacheDiskCacheFactory(context, cacheDirectoryName, yourSizeInBytes));
+```
+
+If you'd like to use some other custom location, You can also implement the [DiskCache.Factory][7] interface yourself, and use the [DiskLruCacheWrapper][11] to create a new cache in your desired location:
 
 ```java
 new GlideBuilder(context)
     .setDiskCache(new DiskCache.Factory() {
         @Override
         public DiskCache build() { 
-            // Careful: the external cache directory doesn't enforce permissions
-            File cacheLocation = new File(context.getExternalCacheDir(), "cache_dir_name");
+            File cacheLocation = getMyCacheLocation();
             cacheLocation.mkdirs();
             return DiskLruCacheWrapper.get(cacheLocation, yourSizeInBytes);
         }
@@ -142,3 +157,4 @@ new GlideBuilder(context)
 [9]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/cache/InternalCacheDiskCacheFactory.html
 [10]: http://developer.android.com/guide/topics/data/data-storage.html#filesInternal
 [11]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/cache/DiskLruCacheWrapper.html
+[12]: http://bumptech.github.io/glide/javadocs/360/com/bumptech/glide/load/engine/cache/ExternalCacheDiskCacheFactory.html
