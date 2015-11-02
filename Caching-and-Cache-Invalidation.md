@@ -141,7 +141,7 @@ public class SynchronizableImageLoader<Model> implements StreamModelLoader<Model
        DataFetcher<InputStream> networkFetcher =
                 mBaseLoader.getResourceFetcher(glideUrl, width, height);
  
-        return getFetcher(networkFetcher, model, width, height); // todo provide impl
+        return new SynchronizableDataFetcher<Model>(networkFetcher, model, width, height);
     }
  
 }
