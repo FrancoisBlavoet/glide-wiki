@@ -80,6 +80,116 @@ Keep in mind that to avoid degrading performance, you will want to batch load an
 
 If all else fails and you can neither change your identifier nor keep track of any reasonable version metadata, you can also disable disk caching entirely using [``diskCacheStrategy()``][13] and [``DiskCacheStrategy.NONE``][14].
 
+
+## Dialog with another persistence layer
+
+In some cases, you might want to integrate Glide with another persistence module.  
+One example would be an app allowing its users to pin some content in order to make it available any time, even while offline.  
+
+Glide does not make any special treatment for a specific key in its LRU cache, any medium can be evicted at any time. In order to implement this feature, it is necessary for Glide to interact with the module responsible for offline content (it's implementation is outside of Glide's scope).  
+
+To do this, we need to rely on a [``MediaLoader``][16] which provides 2 [``DataFetchers``][17] : 
+
+* One that can interrogate the application's persistence module.  
+* One's that will make a network call if the first one fails.  
+
+That way we implement the following request path :  
+
+* Check for the resource in the Memory LRU cache.
+* Check for the resource in the Disk LRU cache.
+* Check for the resource in the persistence module
+* If all else has failed, make a network to try to fetch the resource.
+
+The [``MediaLoader``][16] implementation is pretty straightforward, its only goal here is to provide the custom DataFetcher class:  
+```java 
+public class SynchronizableImageLoader<Model> implements StreamModelLoader<Model> {
+
+    private final ModelLoader<GlideUrl, InputStream> mBaseLoader;
+ 
+    @Nullable
+    private ModelCache<Model, GlideUrl> modelCache;
+ 
+    public SynchronizableImageLoader(Context context) {
+        mBaseLoader = Glide.buildModelLoader(GlideUrl.class, InputStream.class, context);
+        if (getModelCacheSize() > 0) {
+            modelCache = new ModelCache<>(getModelCacheSize());
+        }
+    }
+ 
+    @Override
+    @Nullable
+    public final DataFetcher<InputStream> getResourceFetcher(@Nullable Model model,
+                                                             int width,
+                                                             int height) {
+        if (model == null) {
+            return null;
+        }
+        GlideUrl glideUrl = null;
+        if (modelCache != null) {
+            glideUrl = modelCache.get(model, width, height);
+        }
+        if (glideUrl == null) {
+            String url = getUrl(model, width, height);
+            if (TextUtils.isEmpty(url))  return null;
+            
+            glideUrl = new GlideUrl(url);
+            if (modelCache != null) {
+                modelCache.put(model, width, height, glideUrl);
+            }
+        }
+ 
+       DataFetcher<InputStream> networkFetcher =
+                mBaseLoader.getResourceFetcher(glideUrl, width, height);
+ 
+        return getFetcher(networkFetcher, model, width, height); // todo provide impl
+    }
+ 
+}
+```
+
+The  [``DataFetcher``][17] implementation is where you will dialog with the persistence module :  
+```java
+public class SynchronizableDataFetcher<Model> implements DataFetcher<InputStream> {
+ 
+    @Nullable private final DataFetcher<InputStream> networkFetcher;
+    @NonNull private final Model model;
+    private final int width;
+    private final int height;
+ 
+    public SynchronizableDataFetcher(@Nullable DataFetcher<InputStream> networkFetcher,
+                                     @NonNull Model model,
+                                     int width,
+                                     int height) {
+        this.networkFetcher = networkFetcher;
+        this.model = model;
+        this.width = width;
+        this.height = height;
+    }
+ 
+    @Override
+    public InputStream loadData(Priority priority) throws Exception {
+        InputStream result = loadFromPersistenceModule(model, width, height);
+ 
+        if (result == null && networkFetcher != null) {
+                result = networkFetcher.loadData(priority);
+        }
+        
+        return result;
+    }
+ 
+    @Override
+    public void cleanup() {
+        if (networkFetcher != null) networkFetcher.cleanup();
+    }
+ 
+    @Override
+    public void cancel() {
+        if (networkFetcher != null) networkFetcher.cancel();
+    }
+    ```
+
+
+
 [1]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html#getId()
 [2]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#override(int,%20int)
 [3]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/request/target/Target.html#getSize(com.bumptech.glide.request.target.SizeReadyCallback)
@@ -93,3 +203,5 @@ If all else fails and you can neither change your identifier nor keep track of a
 [13]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/DrawableRequestBuilder.html#diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy)
 [14]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/engine/DiskCacheStrategy.html#NONE
 [15]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/DiskCacheStrategy.html#RESULT
+[16]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/model/ModelLoader.html
+[17]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html
