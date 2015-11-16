@@ -186,7 +186,9 @@ public class SynchronizableDataFetcher<Model> implements DataFetcher<InputStream
     public void cancel() {
         if (networkFetcher != null) networkFetcher.cancel();
     }
-    ```
+```
+
+You can find a full gist [here][18]
 
 
 
@@ -205,3 +207,4 @@ public class SynchronizableDataFetcher<Model> implements DataFetcher<InputStream
 [15]: http://bumptech.github.io/glide/javadocs/350/com/bumptech/glide/load/engine/DiskCacheStrategy.html#RESULT
 [16]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/model/ModelLoader.html
 [17]: http://bumptech.github.io/glide/javadocs/latest/com/bumptech/glide/load/data/DataFetcher.html
+[18]: https://gist.github.com/Teovald/bfddf6cbddc8e61ade80
