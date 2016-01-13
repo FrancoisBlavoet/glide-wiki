@@ -86,7 +86,7 @@ If all else fails and you can neither change your identifier nor keep track of a
 In some cases, you might want to integrate Glide with another persistence module.  
 One example would be an app allowing its users to pin some content in order to make it available any time, even while offline.  
 
-Glide does not make any special treatment for a specific key in its LRU cache, so any medium can be evicted at any time. This goes contrary to the pin feature. In order to implement it, it is necessary for Glide to interact with the module responsible for offline content (it's implementation is outside of Glide's scope).  
+Glide does not make any special treatment for a specific key in its LRU cache, so any medium can be evicted at any time. This goes contrary to the pin feature. In order to implement it, it is necessary for Glide to interact with the module responsible for offline content (The exact implementation of the pinning module is outside of Glide's scope).  
 
 One way to accomplish this is to use a [``MediaLoader``][16] which provides 2 [``DataFetchers``][17] : 
 
@@ -122,7 +122,7 @@ public class SynchronizableImageLoader<Model> implements StreamModelLoader<Model
        [...]
        // We use mBaseLoader in order to provide a NetworkFetcher to our SynchronizableDataFetcher :
        DataFetcher<InputStream> networkFetcher = mBaseLoader.getResourceFetcher(glideUrl, width, height);
-        return new SynchronizableDataFetcher<Model>(networkFetcher, model, width, height);
+       return new SynchronizableDataFetcher<Model>(networkFetcher, model, width, height);
     }
  
 }
