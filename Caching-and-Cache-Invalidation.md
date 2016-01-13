@@ -86,11 +86,11 @@ If all else fails and you can neither change your identifier nor keep track of a
 In some cases, you might want to integrate Glide with another persistence module.  
 One example would be an app allowing its users to pin some content in order to make it available any time, even while offline.  
 
-Glide does not make any special treatment for a specific key in its LRU cache, any medium can be evicted at any time. In order to implement this feature, it is necessary for Glide to interact with the module responsible for offline content (it's implementation is outside of Glide's scope).  
+Glide does not make any special treatment for a specific key in its LRU cache, so any medium can be evicted at any time. This goes contrary to the pin feature. In order to implement it, it is necessary for Glide to interact with the module responsible for offline content (it's implementation is outside of Glide's scope).  
 
-To do this, we need to rely on a [``MediaLoader``][16] which provides 2 [``DataFetchers``][17] : 
+One way to accomplish this is to use a [``MediaLoader``][16] which provides 2 [``DataFetchers``][17] : 
 
-* One that can interrogate the application's persistence module.  
+* One that can interrogate the application's persistence module, in charge of handling pinned content.  
 * One's that will make a network call if the first one fails.  
 
 That way we implement the following request path :  
@@ -103,17 +103,14 @@ That way we implement the following request path :
 The [``MediaLoader``][16] implementation is pretty straightforward, its only goal here is to provide the custom DataFetcher class:  
 ```java 
 public class SynchronizableImageLoader<Model> implements StreamModelLoader<Model> {
-
+    
+    /**
+    * we wrap our implementation around Glide's own ModelLoader. 
+    */
     private final ModelLoader<GlideUrl, InputStream> mBaseLoader;
- 
-    @Nullable
-    private ModelCache<Model, GlideUrl> modelCache;
  
     public SynchronizableImageLoader(Context context) {
         mBaseLoader = Glide.buildModelLoader(GlideUrl.class, InputStream.class, context);
-        if (getModelCacheSize() > 0) {
-            modelCache = new ModelCache<>(getModelCacheSize());
-        }
     }
  
     @Override
@@ -121,26 +118,10 @@ public class SynchronizableImageLoader<Model> implements StreamModelLoader<Model
     public final DataFetcher<InputStream> getResourceFetcher(@Nullable Model model,
                                                              int width,
                                                              int height) {
-        if (model == null) {
-            return null;
-        }
-        GlideUrl glideUrl = null;
-        if (modelCache != null) {
-            glideUrl = modelCache.get(model, width, height);
-        }
-        if (glideUrl == null) {
-            String url = getUrl(model, width, height);
-            if (TextUtils.isEmpty(url))  return null;
-            
-            glideUrl = new GlideUrl(url);
-            if (modelCache != null) {
-                modelCache.put(model, width, height, glideUrl);
-            }
-        }
- 
-       DataFetcher<InputStream> networkFetcher =
-                mBaseLoader.getResourceFetcher(glideUrl, width, height);
- 
+                                                             
+       [...]
+       // We use mBaseLoader in order to provide a NetworkFetcher to our SynchronizableDataFetcher :
+       DataFetcher<InputStream> networkFetcher = mBaseLoader.getResourceFetcher(glideUrl, width, height);
         return new SynchronizableDataFetcher<Model>(networkFetcher, model, width, height);
     }
  
@@ -168,8 +149,10 @@ public class SynchronizableDataFetcher<Model> implements DataFetcher<InputStream
  
     @Override
     public InputStream loadData(Priority priority) throws Exception {
+        // first, let's try to query our persistence module where the pinned content might be :
         InputStream result = loadFromPersistenceModule(model, width, height);
- 
+        
+        // if the content is not available there, fall back on a traditional network fetch :
         if (result == null && networkFetcher != null) {
                 result = networkFetcher.loadData(priority);
         }
